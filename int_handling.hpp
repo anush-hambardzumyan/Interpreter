@@ -13,13 +13,23 @@ std::string int_casts_assignment(std::vector<std::string> cur_line, int line_num
 
 void int_var_dec(std::vector<std::string> cur_line,int line_number)
 {
+
     if(cur_line[cur_line.size() - 1] != ";")
     {
         error_int.missing_semicolon(line_number);
         return;
+    }   
+
+    for(int i = 0; i < allkeywords.size(); ++i)
+    {
+        if(allkeywords[i] == cur_line[1])
+        {
+            error_int.is_keyword(cur_line[1]);
+            exit(-1);
+        }
     }
-    
-    else if(cur_line.size() == 3)
+
+    if(cur_line.size() == 3)
     {
         auto it = intmap.find(cur_line[1]);             //Int a ;
         if(it == intmap.end())
@@ -48,8 +58,17 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
         {
             std::string var_type = int_casts_assignment(cur_line,line_number);
 
-            if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable
+            if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable or keyword
             {
+                for(int i = 0; i < allkeywords.size(); ++i)
+                {
+                    if(allkeywords[i] == cur_line[3])
+                    {
+                        error_int.is_keyword(cur_line[3]);
+                        exit(-1);
+                    }
+                }
+
                 auto it = intmap.find(cur_line[3]);   //Int A = 10 ;
                 if(it == intmap.end())                
                 {
@@ -68,6 +87,11 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
                 }
             }
         }
+    }
+
+    else
+    {
+        error_int.invalid_assignment(line_number);
     }
 }
 

@@ -1,5 +1,5 @@
 #include <iostream>
 
 int main() {
-    Int b = 903.7 ;
+    Int A = break ;
 }    

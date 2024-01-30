@@ -15,7 +15,7 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
-    if(type_check(cur_line[0]) != "")
+    if(type_check(cur_line[0]) != "")       //check if the first token of line is type
     {
         type_cordinator(cur_line[0] , cur_line , line_number);
     }

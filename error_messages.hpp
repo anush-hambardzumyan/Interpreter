@@ -14,8 +14,9 @@ struct Error
     void redeclaration(int line , std::string var);
     void was_not_dec(std::string var);
     void type_incompatiblity(int line);
+    void invalid_assignment(int line);
 
-
+    void is_keyword(std::string name);
     void missing_semicolon(int line);
 };
 
@@ -54,9 +55,19 @@ void Error::was_not_dec(std::string var)
     std::cerr<<"Error: variable " << var << " was not declared: " << std::endl;
 }
 
+void Error::invalid_assignment(int line)
+{
+    std::cerr << "Error: invalid assignment on line " << line << ": " << std::endl;
+}
+
 void Error::type_incompatiblity(int line)
 {
     std::cerr << "Error: type incompatibility on line " << line << ": " << std::endl;
+}
+
+void Error::is_keyword(std::string name)
+{
+    std::cerr<<"Error: "<< name <<" is keyword: " << std::endl;
 }
 
 void Error::missing_semicolon(int line)
