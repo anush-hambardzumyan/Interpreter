@@ -4,13 +4,12 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-//#include "types.hpp"
+#include "types.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
 
 Error error_int;
 
-std::map<std::string,int> intmap;
 void int_var_dec(std::vector<std::string> cur_line, int line_number)
 {
     if(cur_line[cur_line.size() - 1] != ";")
