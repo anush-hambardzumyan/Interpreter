@@ -1,3 +1,5 @@
 #include <iostream>
-int main()
-Int b = 903 ;
+
+int main() {
+    Int b = 903.7 ;
+}    

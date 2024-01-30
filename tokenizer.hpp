@@ -51,7 +51,7 @@ std::vector<std::vector<std::string>> check()
             iostream_usage = false;
         }
         
-        if(tokens.size() == 2 && tokens[0] == "int" && tokens[1] == "main()")
+        if(tokens.size() == 3 && tokens[0] == "int" && tokens[1] == "main()" && tokens[2] == "{")
         {
             if(main_appearance == true)                     
             {
@@ -67,6 +67,11 @@ std::vector<std::vector<std::string>> check()
 
     if(main_appearance == true)
     {
+        if(allLines[allLines.size() - 1][0] != "}" || allLines[allLines.size() - 1].size() != 1)
+        {
+            error_tok.no_main();
+            return {{}};
+        }
         return allLines;
     }
 

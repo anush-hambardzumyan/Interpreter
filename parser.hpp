@@ -4,16 +4,14 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-#include "types.hpp"
+#include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
 #include "int_handling.hpp"
-
-std::vector<std::string> types = {"Bool","Char","Int","Float","Double","String"};
+#include "double_handling.hpp"
 
 std::string type_check(std::string predicted_type);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
-
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
