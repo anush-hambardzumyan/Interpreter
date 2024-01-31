@@ -7,11 +7,23 @@
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
-#include "int_handling.hpp"
-#include "double_handling.hpp"
+//tipery taky haytarari
+
 
 std::string type_check(std::string predicted_type);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
+void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number);
+
+// void print()
+// {
+//     for(int i = 0; i < allvars.size() ; ++i)
+//     {
+//         std::cout << allvars[i].first << " " <<allvars[i].second << " " <<std::endl;
+//     }
+//     std::cout << std::endl;
+//     std::cout << allvars.size();
+// }
+
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
@@ -19,7 +31,10 @@ void parser(std::vector<std::string> cur_line,int line_number)
     {
         type_cordinator(cur_line[0] , cur_line , line_number);
     }
+    //print();
 }
+
+
 
 std::string type_check(std::string predicted_type)
 {
@@ -31,6 +46,59 @@ std::string type_check(std::string predicted_type)
     return "";
 }
 
+void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number)
+{
+    if(type == "String")
+    {
+        auto it = stringmap.find(name);
+        if(it != stringmap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+
+    if(type == "Bool")
+    {
+        auto it = boolmap.find(name);
+        if(it != boolmap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+
+    if(type == "Double")
+    {
+        auto it = doublemap.find(name);
+        if(it != doublemap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+
+    if(type == "Float")
+    {
+        auto it = floatmap.find(name);
+        if(it != floatmap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+
+    if(type == "Char")
+    {
+        auto it = charmap.find(name);
+        if(it != charmap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+}
+
+#include "int_handling.hpp"
+#include "double_handling.hpp"
+#include "bool_handling.hpp"
+
+
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number)
 {
     if(predicted_type == "Int")
@@ -40,8 +108,11 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
 
     if(predicted_type == "Bool")
     {
+        bool_var_dec(cur_line , line_number);
+    }
+
+    if(predicted_type == "....")
+    {
         //.....
     }
 }
-
-

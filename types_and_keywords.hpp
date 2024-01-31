@@ -22,10 +22,3 @@ std::vector<std::string> allkeywords
 
 
 
-// void print()
-// {
-//     for (const auto& entry : intmap) 
-//     {
-//         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
-//     }
-// }

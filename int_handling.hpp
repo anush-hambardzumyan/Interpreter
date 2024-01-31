@@ -4,16 +4,17 @@
 #include <map>
 #include <utility>
 #include <algorithm>
+#include "parser.hpp"
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
 
 Error error_int;
-std::string int_casts_assignment(std::vector<std::string> cur_line, int line_number);
+std::string int_casts_init(std::vector<std::string> cur_line, int line_number);
+
 
 void int_var_dec(std::vector<std::string> cur_line,int line_number)
 {
-
     if(cur_line[cur_line.size() - 1] != ";")
     {
         error_int.missing_semicolon(line_number);
@@ -31,7 +32,7 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
 
     if(cur_line.size() == 3)
     {
-        auto it = intmap.find(cur_line[1]);             //Int a ;
+        auto it = intmap.find(cur_line[1]);             //Int a ; 
         if(it == intmap.end())
         {
             intmap.insert(std::make_pair(cur_line[1],0));
@@ -47,43 +48,53 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
 
     else if(cur_line.size() == 5)
     {
-        auto it = intmap.find(cur_line[1]);             //Int a = 6 ;    Int a = 8 ;
-        if(it != intmap.end())
+        for(int i = 0; i < allvars.size() ; ++i)
         {
-            error_int.redeclaration(line_number,cur_line[1]);
-            return;
+            if(allvars[i].second == cur_line[1])
+            {
+                error_int.redeclaration(line_number,cur_line[1]);
+                return;
+            }
         }
 
-        else
+        
+        std::string var_type = int_casts_init(cur_line,line_number);
+
+        if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable or keyword
         {
-            std::string var_type = int_casts_assignment(cur_line,line_number);
-
-            if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable or keyword
+            for(int i = 0; i < allkeywords.size(); ++i)
             {
-                for(int i = 0; i < allkeywords.size(); ++i)
+                if(allkeywords[i] == cur_line[3])
                 {
-                    if(allkeywords[i] == cur_line[3])
-                    {
-                        error_int.is_keyword(cur_line[3]);
-                        exit(-1);
-                    }
+                    error_int.is_keyword(cur_line[3]);
+                    exit(-1);
                 }
+            }
 
-                auto it = intmap.find(cur_line[3]);   //Int A = 10 ;
-                if(it == intmap.end())                
+            for(int i = 0; i < allvars.size(); ++i)
+            {
+                if(allvars[i].second == cur_line[3])
                 {
-                    try                 
-                    {                                           //Int A = 10 ;
-                        int value = std::stoi(cur_line[3]);     //if it's literal ,insert in map
-                        intmap[cur_line[1]] = value;                      
-                        return;
-                    } 
+                    analyze_maps(cur_line , type_check(allvars[i].first) , cur_line[3],line_number);
+                }
+            }
 
-                    catch (const std::invalid_argument& e) 
-                    {
-                        error_int.was_not_dec(cur_line[3]);
-                        exit(-1);
-                    }
+
+            auto it = intmap.find(cur_line[3]);   //Int A = 10 ;
+            if(it == intmap.end())                
+            {
+                try                 
+                {                                           //Int A = 10 ;
+                    int value = std::stoi(cur_line[3]);     //if it's literal ,insert in map
+                    intmap[cur_line[1]] = value;    
+                    allvars.push_back(std::make_pair("Int" , cur_line[3]));                  
+                    return;
+                } 
+
+                catch (const std::invalid_argument& e) 
+                {
+                    error_int.was_not_dec(cur_line[3]);
+                    exit(-1);
                 }
             }
         }
@@ -95,7 +106,7 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
     }
 }
 
-std::string int_casts_assignment(std::vector<std::string> cur_line , int line_number)
+std::string int_casts_init(std::vector<std::string> cur_line , int line_number)
 {
     std::string var_type = "";
 
@@ -141,12 +152,13 @@ std::string int_casts_assignment(std::vector<std::string> cur_line , int line_nu
             return "Char";
         }
 
-        else if(var_type == "Bool")
+        else if (var_type == "Bool")
         {
             auto it = boolmap.find(cur_line[3]);
-            intmap[cur_line[1]] = it -> second;
+            intmap[cur_line[1]] = static_cast<int>(it->second);
             return "Bool";
         }
     }
     return "";
 }
+

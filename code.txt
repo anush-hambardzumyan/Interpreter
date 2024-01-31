@@ -1,5 +1,6 @@
 #include <iostream>
 
-int main() {
-    Int A = break ;
+int main() { 
+    Bool x = false ;
+    Int x ;
 }    
