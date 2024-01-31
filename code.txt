@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() { 
-    Bool x = true ;
-    Int a = x ;
+    Float k = 9.34 ;
+    Int l = k ;
 }    

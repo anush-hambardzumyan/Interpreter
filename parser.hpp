@@ -16,7 +16,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 
 // void print()
 // {
-//     for (const auto& entry : boolmap) 
+//     for (const auto& entry : intmap) 
 //     {
 //         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
 //     }
@@ -94,6 +94,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 
 #include "int_handling.hpp"
 #include "bool_handling.hpp"
+#include "float_handling.hpp"
 
 
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number)
@@ -108,8 +109,8 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
         bool_var_dec(cur_line , line_number);
     }
 
-    if(predicted_type == "....")
+    if(predicted_type == "Float")
     {
-        //.....
+        float_var_dec(cur_line , line_number);
     }
 }

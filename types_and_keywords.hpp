@@ -18,7 +18,7 @@ std::vector<std::string> comparison_ops = {"<" , "<=" , ">" , ">=" , "==" , "!="
 
 std::vector<std::pair<std::string,std::string>> allvars; //type and var name
 std::vector<std::string> allkeywords
-{"Bool", "Char", "Int", "Float", "Double", "String", "if", "while", "std::cout<<", "std::cin>>" , "return", "break" , "continue" , "main"};
+{"Bool", "Char", "Int", "Float", "Double", "String", "If", "While", "std::cout<<", "std::cin>>" , "return", "break" , "continue" , "main"};
 
 
 

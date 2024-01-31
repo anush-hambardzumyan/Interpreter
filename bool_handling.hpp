@@ -1,5 +1,4 @@
 #pragma once
-#include <stack>
 #include <utility>
 #include <algorithm>
 #include "parser.hpp"
@@ -41,7 +40,7 @@ void bool_var_dec(std::vector<std::string> cur_line,int line_number)
         auto it = boolmap.find(cur_line[1]);             //Bool a ;  //Bool b;
         if(it == boolmap.end())
         {
-            boolmap.insert(std::make_pair(cur_line[1],0));  //bool variable is false(0) by deafult if its not initialized
+            boolmap.insert(std::make_pair(cur_line[1],0));      //bool variable is false(0) by deafult if its not initialized
             allvars.push_back(std::make_pair("Bool" , cur_line[1] ));
         }
 
