@@ -18,7 +18,7 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
     if(cur_line[cur_line.size() - 1] != ";")
     {
         error_int.missing_semicolon(line_number);
-        return;
+        exit(-1);
     }   
 
     for(int i = 0; i < allkeywords.size(); ++i)
@@ -32,18 +32,17 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
 
     if(cur_line.size() == 3)
     {
-        auto it = intmap.find(cur_line[1]);             //Int a ; 
-        if(it == intmap.end())
+        for(int i = 0; i < allvars.size() ; ++i)
         {
-            intmap.insert(std::make_pair(cur_line[1],0));
-            allvars.push_back(std::make_pair("Int" , cur_line[1] ));
+            if(allvars[i].second == cur_line[1])
+            {
+                error_int.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
         }
 
-        else
-        {
-            error_int.redeclaration(line_number,cur_line[1]);
-            return;
-        }
+        intmap.insert(std::make_pair(cur_line[1],0));
+        allvars.push_back(std::make_pair("Int" , cur_line[1] ));
     }
 
     else if(cur_line.size() == 5)
@@ -53,11 +52,10 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
             if(allvars[i].second == cur_line[1])
             {
                 error_int.redeclaration(line_number,cur_line[1]);
-                return;
+                exit(-1);
             }
         }
 
-        
         std::string var_type = int_casts_init(cur_line,line_number);
 
         if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable or keyword
@@ -87,7 +85,7 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
                 {                                           //Int A = 10 ;
                     int value = std::stoi(cur_line[3]);     //if it's literal ,insert in map
                     intmap[cur_line[1]] = value;    
-                    allvars.push_back(std::make_pair("Int" , cur_line[3]));                  
+                    allvars.push_back(std::make_pair("Int" , cur_line[1]));                  
                     return;
                 } 
 

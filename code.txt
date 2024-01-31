@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() { 
-    Bool x = false ;
-    Int x ;
+    Bool x = true ;
+    Int a = x ;
 }    

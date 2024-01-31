@@ -15,7 +15,7 @@ void bool_var_dec(std::vector<std::string> cur_line,int line_number)
     if(cur_line[cur_line.size() - 1] != ";")
     {
         error_bool.missing_semicolon(line_number);
-        return;
+        exit(-1);
     }   
 
     for(int i = 0; i < allkeywords.size(); ++i)
@@ -29,6 +29,15 @@ void bool_var_dec(std::vector<std::string> cur_line,int line_number)
 
     if(cur_line.size() == 3)
     {
+        for(int i = 0; i < allvars.size() ; ++i)
+        {
+            if(allvars[i].second == cur_line[1])
+            {
+                error_int.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
+        }
+
         auto it = boolmap.find(cur_line[1]);             //Bool a ;  //Bool b;
         if(it == boolmap.end())
         {
@@ -45,19 +54,20 @@ void bool_var_dec(std::vector<std::string> cur_line,int line_number)
 
     else if(cur_line.size() == 5)
     {
+        for(int i = 0; i < allvars.size() ; ++i)
+        {
+            if(allvars[i].second == cur_line[1])
+            {
+                error_bool.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
+        }
+
         auto it = boolmap.find(cur_line[1]);             //Bool a = 1 ;    Bool a = 0 ;
         if(it != boolmap.end())
         {
             error_bool.redeclaration(line_number,cur_line[1]);
-            return;
-            for(int i = 0; i < allvars.size() ; ++i)
-            {
-                if(allvars[i].second == cur_line[1])
-                {
-                    error_bool.redeclaration(line_number,cur_line[1]);
-                    return;
-                }
-            }
+            exit(-1);
         }
 
         else
@@ -100,7 +110,7 @@ void bool_var_dec(std::vector<std::string> cur_line,int line_number)
                     {                                                               //Bool A = 10 ;
                         bool value = static_cast<bool> (std::stoi(cur_line[3]));     //if it's literal ,insert in map
                         boolmap[cur_line[1]] = value;    
-                        allvars.push_back(std::make_pair("Bool" , cur_line[3]));                  
+                        allvars.push_back(std::make_pair("Bool" , cur_line[1]));                  
                         return;
                     } 
 

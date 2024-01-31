@@ -16,12 +16,10 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 
 // void print()
 // {
-//     for(int i = 0; i < allvars.size() ; ++i)
+//     for (const auto& entry : boolmap) 
 //     {
-//         std::cout << allvars[i].first << " " <<allvars[i].second << " " <<std::endl;
+//         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
 //     }
-//     std::cout << std::endl;
-//     std::cout << allvars.size();
 // }
 
 
@@ -95,7 +93,6 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 }
 
 #include "int_handling.hpp"
-#include "double_handling.hpp"
 #include "bool_handling.hpp"
 
 
