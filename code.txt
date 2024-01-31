@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() { 
-    Float k = 9.34 ;
-    Int l = k ;
-}    
+    Double A = 9.007 ; 
+    Float c = A ;
+}   

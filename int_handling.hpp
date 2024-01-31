@@ -9,8 +9,7 @@
 #include "error_messages.hpp"
 
 Error error_int;
-std::string int_casts_init(std::vector<std::string> cur_line, int line_number);
-
+void int_casts_init(std::vector<std::string> cur_line, int line_number, std::string var_type);
 
 void int_var_dec(std::vector<std::string> cur_line,int line_number)
 {
@@ -18,11 +17,17 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
     {
         error_int.missing_semicolon(line_number);
         exit(-1);
+    }  
+
+    if(cur_line[2] != "=")
+    {
+        error_int.invalid_op(line_number);
+        exit(-1);
     }   
 
     for(int i = 0; i < allkeywords.size(); ++i)
     {
-        if(allkeywords[i] == cur_line[1])
+        if(cur_line[1] == allkeywords[i])
         {
             error_int.is_keyword(cur_line[1]);
             exit(-1);
@@ -33,7 +38,7 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
     {
         for(int i = 0; i < allvars.size() ; ++i)
         {
-            if(allvars[i].second == cur_line[1])
+            if(cur_line[1] == allvars[i].second)
             {
                 error_int.redeclaration(line_number,cur_line[1]);
                 exit(-1);
@@ -41,21 +46,30 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
         }
 
         intmap.insert(std::make_pair(cur_line[1],0));
-        allvars.push_back(std::make_pair("Int" , cur_line[1] ));
+        allvars.push_back(std::make_pair("Int" , cur_line[1]));
     }
 
     else if(cur_line.size() == 5)
     {
         for(int i = 0; i < allvars.size() ; ++i)
         {
-            if(allvars[i].second == cur_line[1])
+            if(cur_line[1] == allvars[i].second)
             {
                 error_int.redeclaration(line_number,cur_line[1]);
                 exit(-1);
             }
         }
 
-        std::string var_type = int_casts_init(cur_line,line_number);
+        std::string var_type = "";
+
+        for(int i = 0; i < allvars.size(); ++i)
+        {
+            if(cur_line[3] == allvars[i].second)
+            {
+                var_type = allvars[i].first;
+                int_casts_init(cur_line,line_number,var_type);
+            }
+        }
 
         if(var_type == "")        //if the right operand was not found it means that the right operand is literal or undefined variable or keyword
         {
@@ -67,15 +81,6 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
                     exit(-1);
                 }
             }
-
-            for(int i = 0; i < allvars.size(); ++i)
-            {
-                if(allvars[i].second == cur_line[3])
-                {
-                    analyze_maps(cur_line , type_check(allvars[i].first) , cur_line[3],line_number);
-                }
-            }
-
 
             auto it = intmap.find(cur_line[3]);   //Int A = 10 ;
             if(it == intmap.end())                
@@ -103,21 +108,11 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
     }
 }
 
-std::string int_casts_init(std::vector<std::string> cur_line , int line_number)
+void int_casts_init(std::vector<std::string> cur_line , int line_number , std::string var_type)
 {
-    std::string var_type = "";
-
-    for(int i = 0; i < allvars.size(); ++i)
-    {
-        if(cur_line[3] == allvars[i].second)
-        {
-            var_type = allvars[i].first; 
-        }
-    }
-
     if(var_type == "")
     {
-        return "";
+        return ;
     }
 
     if(var_type == "String")            //trying to assign string to int
@@ -132,37 +127,41 @@ std::string int_casts_init(std::vector<std::string> cur_line , int line_number)
         {
             auto it = doublemap.find(cur_line[3]);
             intmap[cur_line[1]] = it -> second;
-            return "Double";
+            allvars.push_back(std::make_pair("Int" , cur_line[1]));
+            return;
         }
 
         if(var_type == "Int")
         {
             auto it = intmap.find(cur_line[3]);
             intmap[cur_line[1]] = it -> second;
-            return "Int";
+            allvars.push_back(std::make_pair("Int" , cur_line[1]));
+            return;
         }
 
         else if(var_type == "Float")
         {
             auto it = floatmap.find(cur_line[3]);
             intmap[cur_line[1]] = it -> second;
-            return "Float";
+            allvars.push_back(std::make_pair("Int" , cur_line[1]));
+            return;
         }
 
         else if(var_type == "Char")
         {
             auto it = charmap.find(cur_line[3]);
             intmap[cur_line[1]] = it -> second;
-            return "Char";
+            allvars.push_back(std::make_pair("Int" , cur_line[1]));
+            return;
         }
 
         else if (var_type == "Bool")
         {
             auto it = boolmap.find(cur_line[3]);
             intmap[cur_line[1]] = static_cast<int>(it->second);
-            return "Bool";
+            allvars.push_back(std::make_pair("Int" , cur_line[1]));
+            return;
         }
     }
-    return "";
 }
 

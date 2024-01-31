@@ -14,14 +14,6 @@ std::string type_check(std::string predicted_type);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
 void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number);
 
-// void print()
-// {
-//     for (const auto& entry : intmap) 
-//     {
-//         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
-//     }
-// }
-
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
@@ -29,10 +21,7 @@ void parser(std::vector<std::string> cur_line,int line_number)
     {
         type_cordinator(cur_line[0] , cur_line , line_number);
     }
-    //print();
 }
-
-
 
 std::string type_check(std::string predicted_type)
 {
@@ -44,8 +33,18 @@ std::string type_check(std::string predicted_type)
     return "";
 }
 
+//DER CHES OGTAGORCEL
 void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number)
 {
+    if(type == "Int")
+    {
+        auto it = intmap.find(name);
+        if(it != intmap.end())
+        {
+            cur_line[3] = it -> second;
+        }
+    }
+
     if(type == "String")
     {
         auto it = stringmap.find(name);
@@ -90,11 +89,13 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
             cur_line[3] = it -> second;
         }
     }
+    
 }
 
 #include "int_handling.hpp"
 #include "bool_handling.hpp"
 #include "float_handling.hpp"
+#include "double_handling.hpp"
 
 
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number)
@@ -113,4 +114,10 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
     {
         float_var_dec(cur_line , line_number);
     }
+
+    if(predicted_type == "Double")
+    {
+        double_var_dec(cur_line , line_number);
+    }
+
 }
