@@ -1,6 +1,10 @@
 #include <iostream>
 
 int main() { 
-    Double A = 9.007 ; 
-    Float c = A ;
+    Int b = 65 ; 
+    Double x = 900.8 ; 
+    Char one = 65 ;
+    Char two = one ;
+    String s1 = "hello" ;
+    String s2 = s1 ;
 }   

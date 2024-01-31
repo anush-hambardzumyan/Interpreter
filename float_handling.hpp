@@ -21,7 +21,7 @@ void float_var_dec(std::vector<std::string> cur_line,int line_number)
 
     if(cur_line[2] != "=")
     {
-        error_int.invalid_op(line_number);
+        error_float.invalid_op(line_number);
         exit(-1);
     }   
 

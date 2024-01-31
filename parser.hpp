@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <stack>
-#include <map>
 #include <utility>
 #include <algorithm>
 #include "types_and_keywords.hpp"
@@ -96,6 +95,8 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 #include "bool_handling.hpp"
 #include "float_handling.hpp"
 #include "double_handling.hpp"
+#include "char_handling.hpp"
+#include "string_handling.hpp"
 
 
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number)
@@ -120,4 +121,13 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
         double_var_dec(cur_line , line_number);
     }
 
+    if(predicted_type == "Char")
+    {
+        char_var_dec(cur_line , line_number);
+    }
+
+    if(predicted_type == "String")
+    {
+        string_var_dec(cur_line , line_number);
+    }
 }

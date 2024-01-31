@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -18,7 +17,8 @@ std::vector<std::string> comparison_ops = {"<" , "<=" , ">" , ">=" , "==" , "!="
 
 std::vector<std::pair<std::string,std::string>> allvars; //type and var name
 std::vector<std::string> allkeywords
-{"Bool", "Char", "Int", "Float", "Double", "String", "If", "While", "std::cout<<", "std::cin>>" , "return", "break" , "continue" , "main"};
+{"Bool", "bool", "Char", "char" , "Int", "int" , "Float", "float" ,"Double", "double", "String", "string", 
+"If", "if" , "While", "while ", "std::cout<<", "std::cin>>" , "return", "break" , "continue" , "main"};
 
 
 

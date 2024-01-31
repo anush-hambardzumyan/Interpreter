@@ -15,7 +15,6 @@ struct Error
     void was_not_dec(std::string var);
     void type_incompatiblity(int line);
     void invalid_assignment(int line);
-
     void is_keyword(std::string name);
     void missing_semicolon(int line);
 };
