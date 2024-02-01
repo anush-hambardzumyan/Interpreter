@@ -11,8 +11,9 @@ std::map<std::string,bool> boolmap;
 std::map<std::string,char> charmap;
 std::map<std::string,std::string> stringmap;
 
-std::vector<std::string> arithmetical_ops_unary = {"++" , "--" , "+=" , "-=" , "*=" , "/="};
-std::vector<std::string> arithmetical_ops_binary = {"+" , "-" , "*" , "/" };
+std::vector<std::string> inc_dec = {"++" , "--" };
+std::vector<std::string> comp_assignments = {"+=" , "-=" , "*=" , "/=" , "%="};
+std::vector<std::string> arithmetical_ops_binary = {"+" , "-" , "*" , "/" , "%"};
 std::vector<std::string> comparison_ops = {"<" , "<=" , ">" , ">=" , "==" , "!="};
 
 std::vector<std::pair<std::string,std::string>> allvars; //type and var name

@@ -6,11 +6,12 @@
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
-//tipery taky haytarari
 
 
 std::string type_check(std::string predicted_type);
+std::string var_check(std::string predicted_var);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
+void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line , int line_number);
 void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number);
 
 
@@ -19,6 +20,11 @@ void parser(std::vector<std::string> cur_line,int line_number)
     if(type_check(cur_line[0]) != "")       //check if the first token of line is type
     {
         type_cordinator(cur_line[0] , cur_line , line_number);
+    }
+
+    if(var_check(cur_line[0]) != "")      //check if the first token of line is variable
+    {
+        var_cordinator( var_check(cur_line[0]) , cur_line , line_number);
     }
 }
 
@@ -32,7 +38,18 @@ std::string type_check(std::string predicted_type)
     return "";
 }
 
-//DER CHES OGTAGORCEL
+std::string var_check(std::string predicted_var)
+{
+    for(int i = 0; i < allvars.size() ; ++i)
+    {
+        if(predicted_var == allvars[i].second)
+        {
+            return allvars[i].first;
+        }
+    }
+    return "";
+}
+
 void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number)
 {
     if(type == "Int")
@@ -40,7 +57,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = intmap.find(name);
         if(it != intmap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
 
@@ -49,7 +66,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = stringmap.find(name);
         if(it != stringmap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
 
@@ -58,7 +75,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = boolmap.find(name);
         if(it != boolmap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
 
@@ -67,7 +84,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = doublemap.find(name);
         if(it != doublemap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
 
@@ -76,7 +93,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = floatmap.find(name);
         if(it != floatmap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
 
@@ -85,7 +102,7 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
         auto it = charmap.find(name);
         if(it != charmap.end())
         {
-            cur_line[3] = it -> second;
+            cur_line[2] = it -> second;
         }
     }
     
@@ -97,7 +114,6 @@ void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::s
 #include "double_handling.hpp"
 #include "char_handling.hpp"
 #include "string_handling.hpp"
-
 
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number)
 {
@@ -129,5 +145,13 @@ void type_cordinator(std::string predicted_type,std::vector<std::string> cur_lin
     if(predicted_type == "String")
     {
         string_var_dec(cur_line , line_number);
+    }
+}
+
+void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line , int line_number)
+{
+    if(predicted_var == "Int")
+    {
+        int_var_assign(cur_line , line_number);
     }
 }
