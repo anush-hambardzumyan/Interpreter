@@ -14,11 +14,18 @@ void int_casts_init(std::vector<std::string> cur_line, int line_number, std::str
 void int_var_assign(std::vector<std::string> cur_line,int line_number);
 void int_casts_assign(std::vector<std::string> cur_line, int line_number, std::string var_type);
 void int_casts_comp_assign(std::vector<std::string> cur_line , int line_number , std::string var_type , std::string operation);
+void add_int(std::vector<std::string> cur_line , int operand1,int operand2);
+void sub_int(std::vector<std::string> cur_line , int operand1,int operand2);
+void mul_int(std::vector<std::string> cur_line , int operand1,int operand2);
+void div1_int(std::vector<std::string> cur_line , int operand1,int operand2);
+void div2_int(std::vector<std::string> cur_line , int operand1,int operand2);
+void operation_choice(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2);
 void compound_add_int(std::vector<std::string>cur_line, int operand);
 void compound_sub_int(std::vector<std::string>cur_line, int operand);
 void compound_mul_int(std::vector<std::string>cur_line, int operand);
 void compound_div1_int(std::vector<std::string>cur_line, int operand);
 void compound_div2_int(std::vector<std::string> cur_line, int operand);
+int return_int(std::string var_type , std::string name , int line_number);
 
 
 void int_var_dec(std::vector<std::string> cur_line,int line_number)
@@ -183,11 +190,18 @@ void int_var_assign(std::vector<std::string> cur_line,int line_number)
         exit(-1);
     }
 
-    auto it = std::find(comparison_ops.begin() , comparison_ops.end(), cur_line[1]);
-    if(it != comparison_ops.end())
+    auto it1 = std::find(comparison_ops.begin() , comparison_ops.end(), cur_line[1]);
+    if(it1 != comparison_ops.end())
     {
         return ; //a > b ;  expression should be optimized
     }
+
+    auto it2 = std::find(arithmetical_ops_binary.begin() , arithmetical_ops_binary.end(), cur_line[1]);
+    if(it2 != arithmetical_ops_binary.end())
+    {
+        return ; //a + b ;  expression should be optimized
+    }
+
 
     if(cur_line.size() == 3 ) // it should be postfix increment or decrement
     {
@@ -274,7 +288,226 @@ void int_var_assign(std::vector<std::string> cur_line,int line_number)
                 int_casts_comp_assign(cur_line,line_number,type,cur_line[1]);
             }
         } 
-    }    
+    }  
+
+    if(cur_line.size() == 6) // assigns an expression
+    {
+        auto it1 = std::find(allkeywords.begin() , allkeywords.end() , cur_line[2]);
+        auto it2 = std::find(allkeywords.begin() , allkeywords.end() , cur_line[4]);
+        if(it1 != allkeywords.end())
+        {
+            error_int.is_keyword(cur_line[2]);
+            exit(-1);
+        }
+        if(it2 != allkeywords.end())
+        {
+            error_int.is_keyword(cur_line[4]);
+            exit(-1);
+        }
+
+        std::string operation = "";
+        for(int i = 0; i < arithmetical_ops_binary.size() ; ++i)
+        {
+            if(cur_line[3] == arithmetical_ops_binary[i])
+            {
+                operation = cur_line[3];
+            }
+        }
+        if(operation == "")
+        {
+            error_int.invalid_assignment(line_number);
+            exit(-1);
+        }
+
+        //case Int a,b .. ; c = a + b ; (or a and b can be another types except string)
+        //flags are for checking if the operands are variables or literals
+        //if in the end of checking value of any of flags stays false, assignment is invalid
+
+        int val1 = -1000000;
+        for(int i = 0; i < allvars.size() ; ++i)
+        {
+            if(cur_line[2] == allvars[i].second)
+            {
+                val1 = return_int(allvars[i].first , allvars[i].second ,line_number);
+            }
+        }
+
+        int val2 = -1000000;
+        for(int i = 0; i < allvars.size(); ++i)
+        {
+            if(cur_line[4] == allvars[i].second)
+            {
+                val2 = return_int(allvars[i].first , allvars[i].second , line_number);
+            }
+        }
+
+        if(val1 == -1000000)
+        {
+            try
+            {
+                val1 = static_cast<int>(std::stod(cur_line[2]));    
+            }
+
+            catch(const std::exception& e)
+            {
+                if(cur_line[2][0] == '\"')  // Int A ;    A = "ib" + ..
+                {
+                    error_int.invalid_assignment(line_number);
+                    exit(-1);
+                }
+
+                // Int A ;    A = 'c' + ...
+                else if(cur_line[2].size() && cur_line[2][0] == '\'' && cur_line[2][2] == '\'')
+                {
+                    val1 = static_cast<int>(cur_line[2][1]);
+                }
+
+                else
+                {
+                    error_int.invalid_assignment(line_number);
+                    exit(-1);
+                }
+            }
+        }
+
+        if(val2 == -1000000)
+        {
+            try
+            {
+                val2 = static_cast<int>(std::stod(cur_line[4]));    
+            }
+
+            catch(const std::exception& e)
+            {
+                if(cur_line[4][0] == '\"')  // Int A ;    A = "ib" + ..
+                {
+                    error_int.invalid_assignment(line_number);
+                    exit(-1);
+                }
+
+                // Int A ;    A = 'c' + ...
+                else if(cur_line[4].size() && cur_line[4][0] == '\'' && cur_line[4][2] == '\'')
+                {
+                    val2 = static_cast<int>(cur_line[4][1]);
+                }
+
+                else
+                {
+                    error_int.invalid_assignment(line_number);
+                    exit(-1);
+                }
+            }
+        }
+
+        if(val1 != -1000000  && val2 != -1000000)
+        {
+            operation_choice(cur_line , operation, val1 , val2);
+            return;
+        }
+
+        else
+        {
+            error_int.invalid_assignment(line_number);
+        }
+    }  
+}
+
+void operation_choice(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2)
+{
+    if(operation == "+")
+    {
+        add_int(cur_line,operand1,operand2);
+        return;
+    }
+
+    if(operation == "-")
+    {
+        sub_int(cur_line,operand1,operand2);
+        return;
+    }
+
+    if(operation == "*")
+    {
+        mul_int(cur_line,operand1,operand2);
+        return;
+    }
+
+    if(operation == "/")
+    {
+        div1_int(cur_line,operand1,operand2);
+        return;
+    }
+
+    if(operation == "%")
+    {
+        div2_int(cur_line,operand1,operand2);
+        return;
+    }
+}
+
+void add_int(std::vector<std::string> cur_line , int operand1,int operand2)
+{
+    intmap[cur_line[0]] = operand1 + operand2;
+}
+
+void sub_int(std::vector<std::string> cur_line ,int operand1,int operand2)
+{
+    intmap[cur_line[0]] = operand1 - operand2;
+}
+
+void mul_int(std::vector<std::string> cur_line ,int operand1,int operand2)
+{
+    intmap[cur_line[0]] = operand1 * operand2;
+}
+
+void div1_int(std::vector<std::string> cur_line ,int operand1,int operand2)
+{
+    intmap[cur_line[0]] = operand1 / operand2;
+}
+
+void div2_int(std::vector<std::string> cur_line ,int operand1,int operand2)
+{
+    intmap[cur_line[0]] = operand1 % operand2;
+}
+
+int return_int(std::string var_type , std::string name , int line_number)
+{
+    if(var_type == "String")
+    {
+        error_int.invalid_assignment(line_number);
+        exit(-1);
+    }
+
+    if(var_type == "Int")
+    {
+        auto it = intmap.find(name);
+        return it -> second;
+    }
+
+    if(var_type == "Double")
+    {
+        auto it = doublemap.find(name);
+        return it -> second;
+    }
+
+    if(var_type == "Float")
+    {
+        auto it = floatmap.find(name);
+        return it -> second;
+    }
+
+    if(var_type == "Bool")
+    {
+        auto it = boolmap.find(name);
+        return it -> second;
+    }
+
+    if(var_type == "Char")
+    {
+        auto it = charmap.find(name);
+        return it -> second;
+    }
+    return 0;
 }
 
 void int_casts_assign(std::vector<std::string> cur_line , int line_number , std::string var_type)

@@ -1,8 +1,9 @@
 #include <iostream>
 
 int main() { 
-    Int b = 100 ; 
     Int a = 1 ;
-    Double z = 90.78 ;
-    a += 'A' ;
+    Int B = 100 ; 
+    Char c = 'A' ;
+    Bool k = true ; 
+    a =  k + 90 ;
 }   
