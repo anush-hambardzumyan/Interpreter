@@ -21,7 +21,7 @@ void compound_add_float(std::vector<std::string>cur_line, float operand);
 void compound_sub_float(std::vector<std::string>cur_line, float operand);
 void compound_mul_float(std::vector<std::string>cur_line, float operand);
 void compound_div1_float(std::vector<std::string>cur_line, float operand);
-int return_float(std::string var_type , std::string name , int line_number);
+float return_float(std::string var_type , std::string name , int line_number);
 
 
 void float_var_dec(std::vector<std::string> cur_line,int line_number)
@@ -606,7 +606,7 @@ void operation_choice_float(std::vector<std::string> cur_line ,std::string opera
     }
 }
 
-int return_float(std::string var_type , std::string name , int line_number)
+float return_float(std::string var_type , std::string name , int line_number)
 {
     if(var_type == "String" || var_type == "Double")
     {

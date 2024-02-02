@@ -25,7 +25,7 @@ void compound_sub_bool(std::vector<std::string>cur_line, bool operand);
 void compound_mul_bool(std::vector<std::string>cur_line, bool operand);
 void compound_div1_bool(std::vector<std::string>cur_line, bool operand);
 void compound_div2_bool(std::vector<std::string>cur_line, bool operand);
-int return_bool(std::string var_type , std::string name , int line_number);
+bool return_bool(std::string var_type , std::string name , int line_number);
 
 
 void bool_var_dec(std::vector<std::string> cur_line,int line_number)
@@ -373,6 +373,16 @@ void bool_var_assign(std::vector<std::string> cur_line,int line_number)
 
         if(val1 == -1000000)
         {
+            if(cur_line[2] == "true")
+            {
+                cur_line[2] = "1";
+            } 
+
+            if(cur_line[2] == "false")
+            {
+                cur_line[2] = "0";
+            }
+
             try
             {
                 val1 = static_cast<bool>(std::stod(cur_line[2]));    
@@ -402,6 +412,15 @@ void bool_var_assign(std::vector<std::string> cur_line,int line_number)
 
         if(val2 == -1000000)
         {
+            if(cur_line[4] == "true")
+            {
+                cur_line[4] = "1";
+            } 
+
+            if(cur_line[4] == "false")
+            {
+                cur_line[4] = "0";
+            }
             try
             {
                 val2 = static_cast<double>(std::stod(cur_line[4]));    
@@ -679,7 +698,7 @@ void operation_choice_bool(std::vector<std::string> cur_line ,std::string operat
     }
 }
 
-int return_bool(std::string var_type , std::string name , int line_number)
+bool return_bool(std::string var_type , std::string name , int line_number)
 {
     if(var_type == "String")
     {

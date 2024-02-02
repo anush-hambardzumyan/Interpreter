@@ -21,7 +21,7 @@ void compound_add_double(std::vector<std::string>cur_line, double operand);
 void compound_sub_double(std::vector<std::string>cur_line, double operand);
 void compound_mul_double(std::vector<std::string>cur_line, double operand);
 void compound_div1_double(std::vector<std::string>cur_line, double operand);
-int return_double(std::string var_type , std::string name , int line_number);
+double return_double(std::string var_type , std::string name , int line_number);
 
 
 
@@ -628,7 +628,7 @@ void operation_choice_double(std::vector<std::string> cur_line ,std::string oper
     }
 }
 
-int return_double(std::string var_type , std::string name , int line_number)
+double return_double(std::string var_type , std::string name , int line_number)
 {
     if(var_type == "String")
     {

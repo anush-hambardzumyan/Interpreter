@@ -1,7 +1,5 @@
 #include <iostream>
 
 int main() { 
-    Bool a = false ;
-    Int k = 900 ;
-    a += k ;
+    String s1 = "Hello" ;
 }   
