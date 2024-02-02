@@ -5,19 +5,19 @@ Error error;
 
 void print1()
 {
-    for (const auto& entry : intmap) 
+    for (const auto& entry : floatmap) 
     {
         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
     }
 }
 
-// void print2()
-// {
-//     for(int i = 0; i < allvars.size(); ++i)
-//     {
-//         std::cout << "Type: " << allvars[i].first << " " << "Name: " << allvars[i].second << std::endl;
-//     }
-// }
+void print2()
+{
+    for(int i = 0; i < allvars.size(); ++i)
+    {
+        std::cout << "Type: " << allvars[i].first << " " << "Name: " << allvars[i].second << std::endl;
+    }
+}
 
 void interpreter(std::vector<std::vector<std::string>> TokStream)
 {
@@ -33,5 +33,5 @@ void interpreter(std::vector<std::vector<std::string>> TokStream)
     }
     print1();
     //print2();
-    std::cout << allvars.size();
+    //std::cout << allvars.size();
 }    

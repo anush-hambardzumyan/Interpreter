@@ -36,12 +36,6 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
         exit(-1);
     }  
 
-    if(cur_line[2] != "=")
-    {
-        error_int.invalid_op(line_number);
-        exit(-1);
-    }   
-
     for(int i = 0; i < allkeywords.size(); ++i)
     {
         if(cur_line[1] == allkeywords[i])
@@ -65,6 +59,12 @@ void int_var_dec(std::vector<std::string> cur_line,int line_number)
         intmap.insert(std::make_pair(cur_line[1],0));
         allvars.push_back(std::make_pair("Int" , cur_line[1]));
     }
+
+    else if(cur_line[2] != "=")
+    {
+        error_int.invalid_op(line_number);
+        exit(-1);
+    }   
 
     else if(cur_line.size() == 5)
     {
@@ -560,7 +560,6 @@ void int_casts_assign(std::vector<std::string> cur_line , int line_number , std:
             return;
         }
     }
-
 }
 
 void compound_add_int(std::vector<std::string> cur_line,int operand)

@@ -50,6 +50,7 @@ std::string var_check(std::string predicted_var)
     return "";
 }
 
+//wasnt used yet
 void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number)
 {
     if(type == "Int")
@@ -153,5 +154,10 @@ void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line 
     if(predicted_var == "Int")
     {
         int_var_assign(cur_line , line_number);
+    }
+
+    if(predicted_var == "Float")
+    {
+        float_var_assign(cur_line , line_number);
     }
 }
