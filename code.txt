@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main() { 
-    Float a = 100.9 ;
-    Float x = 3.14 ; 
-    a += x ;
+    Bool a = false ;
+    Int k = 900 ;
+    a += k ;
 }   

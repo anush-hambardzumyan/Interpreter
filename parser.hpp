@@ -1,19 +1,15 @@
 #pragma once
 #include <iostream>
-#include <stack>
 #include <utility>
 #include <algorithm>
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
 #include "error_messages.hpp"
 
-
 std::string type_check(std::string predicted_type);
 std::string var_check(std::string predicted_var);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
 void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line , int line_number);
-void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number);
-
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
@@ -48,65 +44,6 @@ std::string var_check(std::string predicted_var)
         }
     }
     return "";
-}
-
-//wasnt used yet
-void analyze_maps(std::vector<std::string>& cur_line , std::string type , std::string name , int line_number)
-{
-    if(type == "Int")
-    {
-        auto it = intmap.find(name);
-        if(it != intmap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-
-    if(type == "String")
-    {
-        auto it = stringmap.find(name);
-        if(it != stringmap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-
-    if(type == "Bool")
-    {
-        auto it = boolmap.find(name);
-        if(it != boolmap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-
-    if(type == "Double")
-    {
-        auto it = doublemap.find(name);
-        if(it != doublemap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-
-    if(type == "Float")
-    {
-        auto it = floatmap.find(name);
-        if(it != floatmap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-
-    if(type == "Char")
-    {
-        auto it = charmap.find(name);
-        if(it != charmap.end())
-        {
-            cur_line[2] = it -> second;
-        }
-    }
-    
 }
 
 #include "int_handling.hpp"
@@ -159,5 +96,15 @@ void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line 
     if(predicted_var == "Float")
     {
         float_var_assign(cur_line , line_number);
+    }
+
+    if(predicted_var == "Double")
+    {
+        double_var_assign(cur_line , line_number);
+    }
+
+    if(predicted_var == "Bool")
+    {
+        bool_var_assign(cur_line , line_number);
     }
 }

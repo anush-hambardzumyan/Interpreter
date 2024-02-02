@@ -19,7 +19,7 @@ void sub_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void mul_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void div1_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void div2_int(std::vector<std::string> cur_line , int operand1,int operand2);
-void operation_choice(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2);
+void operation_choice_int(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2);
 void compound_add_int(std::vector<std::string>cur_line, int operand);
 void compound_sub_int(std::vector<std::string>cur_line, int operand);
 void compound_mul_int(std::vector<std::string>cur_line, int operand);
@@ -401,7 +401,7 @@ void int_var_assign(std::vector<std::string> cur_line,int line_number)
 
         if(val1 != -1000000  && val2 != -1000000)
         {
-            operation_choice(cur_line , operation, val1 , val2);
+            operation_choice_int(cur_line , operation, val1 , val2);
             return;
         }
 
@@ -412,7 +412,7 @@ void int_var_assign(std::vector<std::string> cur_line,int line_number)
     }  
 }
 
-void operation_choice(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2)
+void operation_choice_int(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2)
 {
     if(operation == "+")
     {

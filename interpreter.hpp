@@ -5,7 +5,7 @@ Error error;
 
 void print1()
 {
-    for (const auto& entry : floatmap) 
+    for (const auto& entry : boolmap) 
     {
         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
     }

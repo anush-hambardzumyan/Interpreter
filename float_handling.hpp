@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-#include <map>
 #include <utility>
 #include <algorithm>
 #include "parser.hpp"
@@ -18,7 +16,7 @@ void add_float(std::vector<std::string> cur_line , float operand1,float operand2
 void sub_float(std::vector<std::string> cur_line , float operand1,float operand2);
 void mul_float(std::vector<std::string> cur_line , float operand1,float operand2);
 void div1_float(std::vector<std::string> cur_line , float operand1,float operand2);
-void operation_choice(std::vector<std::string> cur_line ,std::string operation, float operand1,float operand2 , int line_number);
+void operation_choice_float(std::vector<std::string> cur_line ,std::string operation, float operand1,float operand2 , int line_number);
 void compound_add_float(std::vector<std::string>cur_line, float operand);
 void compound_sub_float(std::vector<std::string>cur_line, float operand);
 void compound_mul_float(std::vector<std::string>cur_line, float operand);
@@ -286,12 +284,12 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
         auto it2 = std::find(allkeywords.begin() , allkeywords.end() , cur_line[4]);
         if(it1 != allkeywords.end())
         {
-            error_int.is_keyword(cur_line[2]);
+            error_float.is_keyword(cur_line[2]);
             exit(-1);
         }
         if(it2 != allkeywords.end())
         {
-            error_int.is_keyword(cur_line[4]);
+            error_float.is_keyword(cur_line[4]);
             exit(-1);
         }
 
@@ -305,7 +303,7 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
         }
         if(operation == "")
         {
-            error_int.invalid_assignment(line_number);
+            error_float.invalid_assignment(line_number);
             exit(-1);
         }
 
@@ -313,21 +311,21 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
         //flags are for checking if the operands are variables or literals
         //if in the end of checking value of any of flags stays false, assignment is invalid
 
-        int val1 = -1000000;
+        float val1 = -1000000;
         for(int i = 0; i < allvars.size() ; ++i)
         {
             if(cur_line[2] == allvars[i].second)
             {
-                val1 = return_int(allvars[i].first , allvars[i].second ,line_number);
+                val1 = return_float(allvars[i].first , allvars[i].second ,line_number);
             }
         }
 
-        int val2 = -1000000;
+        float val2 = -1000000;
         for(int i = 0; i < allvars.size(); ++i)
         {
             if(cur_line[4] == allvars[i].second)
             {
-                val2 = return_int(allvars[i].first , allvars[i].second , line_number);
+                val2 = return_float(allvars[i].first , allvars[i].second , line_number);
             }
         }
 
@@ -335,14 +333,14 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
         {
             try
             {
-                val1 = static_cast<int>(std::stod(cur_line[2]));    
+                val1 = static_cast<float>(std::stod(cur_line[2]));    
             }
 
             catch(const std::exception& e)
             {
                 if(cur_line[2][0] == '\"')  // Int A ;    A = "ib" + ..
                 {
-                    error_int.invalid_assignment(line_number);
+                    error_float.invalid_assignment(line_number);
                     exit(-1);
                 }
 
@@ -354,7 +352,7 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
 
                 else
                 {
-                    error_int.invalid_assignment(line_number);
+                    error_float.invalid_assignment(line_number);
                     exit(-1);
                 }
             }
@@ -391,7 +389,7 @@ void float_var_assign(std::vector<std::string> cur_line,int line_number)
 
         if(val1 != -1000000  && val2 != -1000000)
         {
-            operation_choice(cur_line , operation, val1 , val2 , line_number);
+            operation_choice_float(cur_line , operation, val1 , val2 , line_number);
             return;
         }
 
@@ -575,7 +573,7 @@ void div1_float(std::vector<std::string> cur_line , float operand1 , float opera
     floatmap[cur_line[0]] = operand1 / operand2;
 }
 
-void operation_choice(std::vector<std::string> cur_line ,std::string operation, float operand1,float operand2 , int line_number)
+void operation_choice_float(std::vector<std::string> cur_line ,std::string operation, float operand1,float operand2 , int line_number)
 {
     if(operation == "+")
     {
