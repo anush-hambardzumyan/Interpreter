@@ -1,7 +1,6 @@
 #include <iostream>
 
 int main() { 
-    String a = "aaaa" ;
-    std::cin >> a ;
-    std::cout << a ;
+    Int array1 [4] ;
+    Int array2 = array1 ;
 }   

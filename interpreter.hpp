@@ -3,7 +3,7 @@
 
 void print1()
 {
-    for (const auto& entry : stringmap) 
+    for (const auto& entry : intmap) 
     {
         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
     }
@@ -15,6 +15,17 @@ void print2()
     {
         std::cout << "Type: " << allvars[i].first << " " << "Name: " << allvars[i].second << std::endl;
     }
+}
+
+void print3()
+{
+    for (const auto& element : intarrmap) 
+    {
+        std::cout << "String: " << element.first << ", List of ints: ";
+        for (const auto& value : element.second) {
+            std::cout << value << " ";
+        }
+    }       
 }
 
 void interpreter(std::vector<std::vector<std::string>> TokStream)
@@ -29,6 +40,7 @@ void interpreter(std::vector<std::vector<std::string>> TokStream)
 
         parser(cur_line,lines + 1);
     }
-    print1();
+    //print1();
     //print2();
+    //print3();
 }    

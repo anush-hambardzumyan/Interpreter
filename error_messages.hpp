@@ -17,6 +17,8 @@ struct Error
     void invalid_assignment(int line);
     void is_keyword(std::string name);
     void missing_semicolon(int line);
+    void invalid_dec(int line);
+    void too_many_args(std::string arr_name);
 };
 
 void Error::file_isnt_open()
@@ -72,4 +74,14 @@ void Error::is_keyword(std::string name)
 void Error::missing_semicolon(int line)
 {
     std::cerr << "\033[1;31m Error: missing ';' in line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl;
+}
+
+void Error::invalid_dec(int line)
+{
+    std::cerr << "\033[1;31m Error: invalid declaration on line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl;
+}
+
+void Error::too_many_args(std::string arr_name)
+{
+    std::cerr << "\033[1;31m Error: too many arguments for \033[0m" << arr_name << "\033[1;31m : \033[0m" << std::endl;
 }

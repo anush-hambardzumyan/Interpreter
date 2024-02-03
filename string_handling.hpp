@@ -43,7 +43,7 @@ void string_var_dec(std::vector<std::string> cur_line,int line_number)
 
     if(cur_line.size() != 5)
     {
-        error_char.invalid_assignment(line_number);
+        error_string.invalid_assignment(line_number);
         exit(-1);
     }
 
@@ -53,7 +53,7 @@ void string_var_dec(std::vector<std::string> cur_line,int line_number)
         {
             if(cur_line[1] == allvars[i].second)
             {
-                error_char.redeclaration(line_number,cur_line[1]);
+                error_string.redeclaration(line_number,cur_line[1]);
                 exit(-1);
             }
         }
@@ -133,7 +133,7 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
 {
     if(cur_line[cur_line.size() - 1] != ";")
     {
-        error_char.missing_semicolon(line_number);
+        error_string.missing_semicolon(line_number);
         exit(-1);
     }
 
@@ -326,7 +326,7 @@ void string_casts_assign(std::vector<std::string> cur_line, int line_number, std
 
     if(var_type != "String")       
     {
-        error_bool.type_incompatiblity(line_number);
+        error_string.type_incompatiblity(line_number);
         exit(-1);
     }
 
@@ -414,7 +414,7 @@ std::string return_string(std::string var_type , std::string name , int line_num
     
     if(var_type != "String")
     {
-        error_bool.invalid_assignment(line_number);
+        error_string.invalid_assignment(line_number);
         exit(-1);
     }
 
