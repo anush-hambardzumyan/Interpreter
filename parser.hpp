@@ -113,5 +113,8 @@ void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line 
         char_var_assign(cur_line , line_number);
     }
 
-    
+    if(predicted_var == "String")
+    {
+        string_var_assign(cur_line , line_number);
+    }
 }

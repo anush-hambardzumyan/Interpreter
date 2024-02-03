@@ -12,10 +12,10 @@ void string_casts_init(std::vector<std::string> cur_line,int line_number ,std::s
 void string_var_assign(std::vector<std::string> cur_line,int line_number);
 void string_casts_assign(std::vector<std::string> cur_line, int line_number, std::string var_type);
 void string_casts_comp_assign(std::vector<std::string> cur_line , int line_number , std::string var_type , std::string operation);
-void add_string(std::vector<std::string> cur_line , char operand1,char operand2);
-void operation_choice_string(std::vector<std::string> cur_line ,std::string operation, char operand1,char operand2 , int line_number);
-void compound_add_string(std::vector<std::string>cur_line, char operand, int line_number);
-char return_string(std::string var_type , std::string name , int line_number);
+void add_string(std::vector<std::string> cur_line , std::string operand1,std::string operand2);
+void operation_choice_string(std::vector<std::string> cur_line ,std::string operation, std::string operand1, std::string operand2 , int line_number);
+void compound_add_string(std::vector<std::string>cur_line, std::string operand, int line_number);
+std::string return_string(std::string var_type , std::string name , int line_number);
 
 
 void string_var_dec(std::vector<std::string> cur_line,int line_number)
@@ -87,6 +87,8 @@ void string_var_dec(std::vector<std::string> cur_line,int line_number)
             std::string last_string = cur_line[cur_line.size() - 2];
             if(last_string[0] == '\"' && last_string[last_string.size() - 1] == '\"')
             {
+                last_string.erase(last_string.begin());
+                last_string.erase(last_string.end() - 1);
                 stringmap[cur_line[1]] = last_string;
                 allvars.push_back(std::make_pair("String", cur_line[1])); 
                 return;
@@ -135,6 +137,12 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
         exit(-1);
     }
 
+    if(cur_line.size() == 3 ) 
+    {
+        error_string.invalid_op(line_number);
+        exit(-1);
+    }
+
     auto it1 = std::find(comparison_ops.begin() , comparison_ops.end(), cur_line[1]);
     if(it1 != comparison_ops.end())
     {
@@ -147,42 +155,12 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
         return ; //a + b ;  expression should be optimized
     }
 
-
-    if(cur_line.size() == 3 ) // it should be postfix increment or decrement
-    {
-        if(cur_line[1] == "++") // a ++ ;
-        {
-            if(charmap[cur_line[0]] + 1 > 127)
-            {
-                error_char.invalid_op(line_number);
-                exit(-1);
-            }
-            charmap[cur_line[0]] += 1;
-        }
-
-        else if(cur_line[1] == "--") //a -- ;
-        {
-            if(charmap[cur_line[0]] - 1 < 0)
-            {
-                error_char.invalid_op(line_number);
-                exit(-1);
-            }
-            charmap[cur_line[0]] -= 1;
-        }
-
-        else
-        {
-            error_char.invalid_assignment(line_number);
-            exit(-1);
-        }
-    }
-
     if(cur_line.size() == 4) //it should be ordinary assignment or compound assignment
     {
         auto it = std::find(allkeywords.begin() , allkeywords.end() ,cur_line[2]);
         if(it != allkeywords.end())
         {
-            error_char.is_keyword(cur_line[2]);   // a = break ;
+            error_string.is_keyword(cur_line[2]);   // a = break ;
             exit(-1);
         }
         
@@ -194,53 +172,24 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
                 if(cur_line[2] == allvars[i].second)
                 {
                     predicted_type = allvars[i].first;
-                    char_casts_assign(cur_line,line_number,predicted_type);
+                    string_casts_assign(cur_line,line_number,predicted_type);
                 }
             }
 
             if(predicted_type == "")
             {               
-                try                 
-                {                                           
-                    int value = std::stoi(cur_line[2]);   
-                    if(value >= 0 && value <= 127)  
-                    {
-                        charmap[cur_line[0]] = value; 
-                        return;
-                    }                    
-                    else
-                    {
-                        error_char.invalid_op(line_number);
-                        exit(-1);
-                    }
-                } 
-
-                catch (const std::invalid_argument& e) 
+                if(cur_line[2][0] == '\"' && cur_line[2][(cur_line[2].size()) - 1] == '\"')
                 {
-                    if(cur_line[2].size() == 3 && cur_line[2][0] == '\'' && cur_line[2][2] == '\'')
-                    {
-                        int val = static_cast<int> (cur_line[2][1]);
-                        if(val >= 0 && val <= 127)
-                        {
-                            charmap[cur_line[0]] = (cur_line[2][1]);  //a = 'A' ;
-                            return;
-                        }
-                        else
-                        {
-                            error_char.invalid_op(line_number);
-                            exit(-1);
-                        }
-                    }
-
-                    if(cur_line[2][0] == '\"' && cur_line[2][(cur_line[2].size()) - 1] == '\"')
-                    {
-                        error_char.invalid_assignment(line_number);   //a = "bckdjs" ;
-                        exit(-1);
-                    }
-                    
-                    error_char.was_not_dec(cur_line[2]);
-                    exit(-1);
+                    std::string cur_str = cur_line[2];
+                    cur_str.erase(cur_str.begin());
+                    cur_str.erase(cur_str.end() - 1);
+                    stringmap[cur_line[0]] = cur_str;
+                    return;
                 }
+                
+                error_string.was_not_dec(cur_line[2]);
+                exit(-1);
+                
             }
         }  
 
@@ -250,14 +199,14 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
             auto it = std::find(comp_assignments.begin(),comp_assignments.end() , cur_line[1]);
             if(it == comp_assignments.end())
             {
-                error_char.invalid_assignment(line_number);
+                error_string.invalid_assignment(line_number);
                 exit(-1);
             }
 
             else    // a += b ;
             {
                 std::string type = var_check(cur_line[2]);
-                char_casts_comp_assign(cur_line,line_number,type,cur_line[1]);
+                string_casts_comp_assign(cur_line,line_number,type,cur_line[1]);
             }
         } 
     }  
@@ -268,12 +217,13 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
         auto it2 = std::find(allkeywords.begin() , allkeywords.end() , cur_line[4]);
         if(it1 != allkeywords.end())
         {
-            error_char.is_keyword(cur_line[2]);
+            error_string.is_keyword(cur_line[2]);
             exit(-1);
         }
+
         if(it2 != allkeywords.end())
         {
-            error_char.is_keyword(cur_line[4]);
+            error_string.is_keyword(cur_line[4]);
             exit(-1);
         }
 
@@ -285,7 +235,7 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
                 operation = cur_line[3];
             }
         }
-        if(operation == "")
+        if(operation == "" || operation != "+")
         {
             error_char.invalid_assignment(line_number);
             exit(-1);
@@ -295,91 +245,179 @@ void string_var_assign(std::vector<std::string> cur_line,int line_number)
         //flags are for checking if the operands are variables or literals
         //if in the end of checking value of any of flags stays false, assignment is invalid
 
-        int val1 = -1000000;
+        std::string val1 = "-1000000";
         for(int i = 0; i < allvars.size() ; ++i)
         {
             if(cur_line[2] == allvars[i].second)
             {
-                val1 = return_char(allvars[i].first , allvars[i].second ,line_number);
+                val1 = return_string(allvars[i].first , allvars[i].second ,line_number);
             }
         }
 
-        int val2 = -1000000;
+        std::string val2 = "-1000000";
         for(int i = 0; i < allvars.size(); ++i)
         {
             if(cur_line[4] == allvars[i].second)
             {
-                val2 = return_char(allvars[i].first , allvars[i].second , line_number);
+                val2 = return_string(allvars[i].first , allvars[i].second , line_number);
             }
         }
 
-        if(val1 == -1000000)
+        std::string op1 = cur_line[2];
+        std::string op2 = cur_line[4];
+        if(val1 == "-1000000")
         {
-            try
+            if(op1[0] == '\"' && op1[op1.size() - 1] == '\"')
             {
-                val1 = static_cast<char>(std::stoi(cur_line[2]));    
+                op1.erase(op1.begin());
+                op1.erase(op1.end() - 1);
+                val1 = op1;
             }
 
-            catch(const std::exception& e)
+            else
             {
-                if(cur_line[2][0] == '\"')  // Char A ;    A = "ib" + ..
-                {
-                    error_char.invalid_assignment(line_number);
-                    exit(-1);
-                }
-
-                // Char A ;    A = 'c' + ...
-                else if(cur_line[2].size() && cur_line[2][0] == '\'' && cur_line[2][2] == '\'')
-                {
-                    val1 = static_cast<char>(cur_line[2][1]);
-                }
-
-                else
-                {
-                    error_char.invalid_assignment(line_number);
-                    exit(-1);
-                }
+                error_string.invalid_assignment(line_number);
+                exit(-1);
             }
         }
 
-        if(val2 == -1000000)
-        {
-            try
+        if(val2 == "-1000000")
+        {   
+            if(op2[0] == '\"' && op2[op2.size() - 1] == '\"')
             {
-                val2 = static_cast<char>(std::stoi(cur_line[4]));    
+                op2.erase(op2.begin());
+                op2.erase(op2.end() - 1);
+                val2 = op2;
             }
 
-            catch(const std::exception& e)
+            else
             {
-                if(cur_line[4][0] == '\"')  // Char A ;    A = "ib" + ..
-                {
-                    error_char.invalid_assignment(line_number);
-                    exit(-1);
-                }
-
-                // Char A ;    A = 'c' + ...
-                else if(cur_line[4].size() && cur_line[4][0] == '\'' && cur_line[4][2] == '\'')
-                {
-                    val2 = static_cast<char>(cur_line[4][1]);
-                }
-
-                else
-                {
-                    error_char.invalid_assignment(line_number);
-                    exit(-1);
-                }
+                error_string.invalid_assignment(line_number);
+                exit(-1);
             }
         }
 
-        if(val1 != -1000000  && val2 != -1000000)
+        if(val1 != "-1000000"  && val2 != "-1000000")
         {
-            operation_choice_char(cur_line , operation, val1 , val2 , line_number);
+            operation_choice_string(cur_line , operation, val1 , val2 , line_number);
             return;
         }
 
         else
         {
-            error_char.invalid_assignment(line_number);
+            error_string.invalid_assignment(line_number);
         }
     }  
 }
+
+void string_casts_assign(std::vector<std::string> cur_line, int line_number, std::string var_type)
+{
+    if(var_type == "")
+    {
+        if(cur_line[2][0] == '\"' && cur_line[2][(cur_line[2].size()) - 1] == '\"')
+        {
+            std::string cur_str = cur_line[2];
+            cur_str.erase(cur_str.begin());
+            cur_str.erase(cur_str.end() - 1);
+            stringmap[cur_line[0]] = cur_str;
+            return;
+        }
+    }
+
+    if(var_type != "String")       
+    {
+        error_bool.type_incompatiblity(line_number);
+        exit(-1);
+    }
+
+    else
+    {
+        auto it = stringmap.find(cur_line[2]);
+        stringmap[cur_line[0]] = it-> second;
+        return;
+    }
+}
+
+void compound_add_string(std::vector<std::string> cur_line, std::string operand , int line_number)
+{
+    stringmap[cur_line[0]] += operand;
+}
+
+void string_casts_comp_assign(std::vector<std::string> cur_line , int line_number , std::string var_type , std::string operation)
+{
+    if(operation != "+=")
+    {
+        error_string.invalid_op(line_number);
+        exit(-1);
+    }
+
+    std::string val = "-10000" ;
+
+    if(var_type != "")
+    {
+        if(var_type != "String")
+        {
+            error_string.type_incompatiblity(line_number);
+            exit(-1);
+        }
+
+        else
+        {
+            auto it = stringmap.find(cur_line[2]);
+            val = it -> second; 
+        }
+    }
+
+    else 
+    {
+        if(cur_line[2][0] == '\"' && cur_line[2][(cur_line[2].size()) - 1] == '\"')
+        {
+            std::string cur_str = cur_line[2];
+            cur_str.erase(cur_str.begin());
+            cur_str.erase(cur_str.end() - 1);
+            stringmap[cur_line[0]] = cur_str;
+            return;
+        }
+
+        else
+        {
+            error_string.invalid_op(line_number);
+            exit(-1);
+        }
+    }
+
+    compound_add_string(cur_line , val , line_number);
+}
+
+void add_string(std::vector<std::string> cur_line , std::string operand1,std::string operand2)
+{
+    stringmap[cur_line[0]] = operand1 + operand2;
+}
+
+void operation_choice_string(std::vector<std::string> cur_line ,std::string operation, std::string operand1,std::string operand2 , int line_number)
+{
+    if(operation != "+")
+    {
+        error_string.invalid_op(line_number);
+        exit(-1);
+    }
+    add_string(cur_line,operand1,operand2);
+    return;
+}
+
+std::string return_string(std::string var_type , std::string name , int line_number)
+{
+    if(var_type == "")
+    {
+
+    }
+    
+    if(var_type != "String")
+    {
+        error_bool.invalid_assignment(line_number);
+        exit(-1);
+    }
+
+    auto it = stringmap.find(name);
+    return it -> second;
+}    
