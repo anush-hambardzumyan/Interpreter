@@ -5,7 +5,7 @@ Error error;
 
 void print1()
 {
-    for (const auto& entry : stringmap) 
+    for (const auto& entry : charmap) 
     {
         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
     }

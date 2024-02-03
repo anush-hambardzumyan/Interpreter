@@ -1,8 +1,7 @@
 #include <iostream>
 
 int main() { 
-    String s1 = "Hello" ;
-    String s2 = s1 ; 
-    String s3 = "0" ;
-    s3 =  "0" ;
+    Char a = 'A' ;
+    ++ a ;
+    ++ a ;
 }   

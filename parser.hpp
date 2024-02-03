@@ -10,6 +10,7 @@ std::string type_check(std::string predicted_type);
 std::string var_check(std::string predicted_var);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
 void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line , int line_number);
+void prefix_inc_dec(std::vector<std::string> cur_line, int line_number);
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
@@ -21,6 +22,11 @@ void parser(std::vector<std::string> cur_line,int line_number)
     if(var_check(cur_line[0]) != "")      //check if the first token of line is variable
     {
         var_cordinator( var_check(cur_line[0]) , cur_line , line_number);
+    }
+
+    if(cur_line[0] == "++" || cur_line[0] == "--")
+    {
+        prefix_inc_dec(cur_line , line_number);
     }
 }
 
@@ -116,5 +122,93 @@ void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line 
     if(predicted_var == "String")
     {
         string_var_assign(cur_line , line_number);
+    }
+}
+
+void prefix_inc_dec(std::vector<std::string> cur_line, int line_number)
+{
+    if(cur_line.size() != 3 || var_check(cur_line[1]) == "")
+    {
+        error_int.invalid_op(line_number);
+        exit(-1);
+    }
+
+    if(cur_line[2] != ";")
+    {
+        error_int.missing_semicolon(line_number);
+        exit(-1);
+    }
+
+    std::string var_type = var_check(cur_line[1]);
+    if(var_type == "" || var_type == "String")
+    {
+        error_int.invalid_op(line_number);
+        exit(-1);
+    }
+
+    std::swap(cur_line[0] , cur_line[1]);
+    if(var_type == "Int")
+    {
+        if(cur_line[1] == "++") // a ++ ;
+        {
+            intmap[cur_line[0]] += 1;
+        }
+
+        else if(cur_line[1] == "--") //a --;
+        {
+            intmap[cur_line[0]] -= 1;
+        }
+    }
+
+    if(var_type == "Double")
+    {
+        if(cur_line[1] == "++") // a ++ ;
+        {
+            doublemap[cur_line[0]] += 1;
+        }
+
+        else if(cur_line[1] == "--") //a --;
+        {
+            doublemap[cur_line[0]] -= 1;
+        }
+    }
+
+    if(var_type == "Float")
+    {
+        if(cur_line[1] == "++") // a ++ ;
+        {
+            floatmap[cur_line[0]] += 1;
+        }
+
+        else if(cur_line[1] == "--") //a --;
+        {
+            floatmap[cur_line[0]] -= 1;
+        }
+    }
+
+    if(var_type == "Bool")
+    {
+        if(cur_line[1] == "++") // a ++ ;
+        {
+            boolmap[cur_line[0]] += 1;
+        }
+
+        else if(cur_line[1] == "--") //a --;
+        {
+            boolmap[cur_line[0]] -= 1;
+        }
+    }
+
+    if(var_type == "Char")
+    {
+        if(cur_line[1] == "++") // a ++ ;
+        {
+            compound_add_char(cur_line,1,line_number);
+        }
+
+        else if(cur_line[1] == "--") //a --;
+        {
+            compound_sub_char(cur_line,1,line_number);
+        }
     }
 }

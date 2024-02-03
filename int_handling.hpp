@@ -20,11 +20,11 @@ void mul_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void div1_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void div2_int(std::vector<std::string> cur_line , int operand1,int operand2);
 void operation_choice_int(std::vector<std::string> cur_line ,std::string operation, int operand1,int operand2);
-void compound_add_int(std::vector<std::string>cur_line, int operand);
-void compound_sub_int(std::vector<std::string>cur_line, int operand);
-void compound_mul_int(std::vector<std::string>cur_line, int operand);
-void compound_div1_int(std::vector<std::string>cur_line, int operand);
-void compound_div2_int(std::vector<std::string> cur_line, int operand);
+void compound_add_int(std::vector<std::string>cur_line, int operand, int line_number);
+void compound_sub_int(std::vector<std::string>cur_line, int operand, int line_number);
+void compound_mul_int(std::vector<std::string>cur_line, int operand, int line_number);
+void compound_div1_int(std::vector<std::string>cur_line, int operand, int line_number);
+void compound_div2_int(std::vector<std::string> cur_line, int operand, int line_number);
 int return_int(std::string var_type , std::string name , int line_number);
 
 
@@ -562,27 +562,27 @@ void int_casts_assign(std::vector<std::string> cur_line , int line_number , std:
     }
 }
 
-void compound_add_int(std::vector<std::string> cur_line,int operand)
+void compound_add_int(std::vector<std::string> cur_line,int operand , int line_number)
 {
     intmap[cur_line[0]] += operand;
 }
 
-void compound_sub_int(std::vector<std::string> cur_line ,int operand)
+void compound_sub_int(std::vector<std::string> cur_line ,int operand ,int line_number)
 {
     intmap[cur_line[0]] -= operand;
 }
 
-void compound_mul_int(std::vector<std::string> cur_line, int operand)
+void compound_mul_int(std::vector<std::string> cur_line, int operand, int line_number)
 {
     intmap[cur_line[0]] *= operand;
 }
 
-void compound_div1_int(std::vector<std::string> cur_line, int operand)
+void compound_div1_int(std::vector<std::string> cur_line, int operand,int line_number)
 {
     intmap[cur_line[0]] /= operand;
 }
 
-void compound_div2_int(std::vector<std::string> cur_line, int operand)
+void compound_div2_int(std::vector<std::string> cur_line, int operand, int line_number)
 {
     intmap[cur_line[0]] %= operand;
 }
@@ -656,26 +656,26 @@ void int_casts_comp_assign(std::vector<std::string> cur_line , int line_number ,
 
     if(operation == "+=")
     {
-        compound_add_int(cur_line ,val);
+        compound_add_int(cur_line ,val,line_number);
     }
 
     if(operation == "-=")
     {
-        compound_sub_int(cur_line ,val);
+        compound_sub_int(cur_line ,val,line_number);
     }
 
     if(operation == "*=")
     {
-        compound_mul_int(cur_line, val);
+        compound_mul_int(cur_line, val,line_number);
     }
 
     if(operation == "/=")
     {
-        compound_div1_int(cur_line , val);
+        compound_div1_int(cur_line , val,line_number);
     }
 
     if(operation == "%=")
     {
-        compound_div2_int(cur_line , val);
+        compound_div2_int(cur_line , val,line_number);
     }
 }
