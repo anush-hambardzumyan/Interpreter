@@ -31,7 +31,7 @@ void interpreter(std::vector<std::vector<std::string>> TokStream)
 
         parser(cur_line,lines + 1);
     }
-    print1();
+    //print1();
     //print2();
-    //std::cout << allvars.size();
+
 }    

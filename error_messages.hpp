@@ -21,55 +21,55 @@ struct Error
 
 void Error::file_isnt_open()
 {
-    std::cerr << "Error: file isn't opened: " << std::endl;
+    std::cerr << "\033[1;31m Error: file isn't opened:  \033[0m" << std::endl; 
 }
 
 void Error::only_one_main()
 {
-    std::cerr << "Error: program can have only one main function: " << std::endl;
+    std::cerr << "\033[1;31m Error: program can have only one main function: \033[0m" << std::endl;
 }
 
 void Error::main_is_keyword()
 {
-    std::cerr<<"Error: main in keyword: " << std::endl;
+    std::cerr<<"\033[1;31m Error: main is keyword: \033[0m" << std::endl;
 }
 
 void Error::no_main()
 {
-    std::cerr << "Error: undefined reference to main: " << std::endl;
+    std::cerr << "\033[1;31m  Error: undefined reference to main: \033[0m" << std::endl;
 }
 
 void Error::invalid_op(int line)
 {
-    std::cerr<<"Error: invalid operation on line " << line << " : " << std::endl;
+    std::cerr<< "\033[1;31m Error: invalid operation on line \033[0m" << line << " : " << std::endl;
 }
 
 void Error::redeclaration(int line , std::string var)
 {
-    std::cerr<< "Error: redeclaration of variable " << var << " on line " << line << " :" << std::endl; 
+    std::cerr<< "\033[1;31m Error: redeclaration of variable \033[0m" << var << "\033[1;31m on line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl; 
 }
 
 void Error::was_not_dec(std::string var)
 {
-    std::cerr<<"Error: variable " << var << " was not declared: " << std::endl;
+    std::cerr<<"\033[1;31m Error: variable \033[0m" << var << "\033[1;31m was not declared: \033[0m" << std::endl;
 }
 
 void Error::invalid_assignment(int line)
 {
-    std::cerr << "Error: invalid assignment on line " << line << ": " << std::endl;
+    std::cerr << "\033[1;31m Error: invalid assignment on line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl;
 }
 
 void Error::type_incompatiblity(int line)
 {
-    std::cerr << "Error: type incompatibility on line " << line << ": " << std::endl;
+    std::cerr << "\033[1;31m Error: type incompatibility on line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl;
 }
 
 void Error::is_keyword(std::string name)
 {
-    std::cerr<<"Error: "<< name <<" is keyword: " << std::endl;
+    std::cerr<<"\033[1;31m Error: "<< name <<"\033[1;31m is keyword: \033[0m" << std::endl;
 }
 
 void Error::missing_semicolon(int line)
 {
-    std::cerr << "Error: missing ';' in line " << line << ": " << std::endl;
+    std::cerr << "\033[1;31m Error: missing ';' in line \033[0m" << line << "\033[1;31m : \033[0m" << std::endl;
 }

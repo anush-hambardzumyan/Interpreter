@@ -4,4 +4,8 @@ int main() {
     Char a = 'A' ;
     ++ a ;
     ++ a ;
+    Bool b = true ;
+    std::cout << b ;
+    std::cout << " " ;
+    std::cout << a ;
 }   
