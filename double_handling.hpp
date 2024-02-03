@@ -22,6 +22,7 @@ void compound_sub_double(std::vector<std::string>cur_line, double operand);
 void compound_mul_double(std::vector<std::string>cur_line, double operand);
 void compound_div1_double(std::vector<std::string>cur_line, double operand);
 double return_double(std::string var_type , std::string name , int line_number);
+void double_arr_dec(std::vector<std::string> cur_line , int line_number);
 
 
 
@@ -42,8 +43,23 @@ void double_var_dec(std::vector<std::string> cur_line,int line_number)
         }
     }
 
+    if(cur_line.size() == 4 || cur_line.size() == 8) //this cond means its array declaration
+    {
+        double_arr_dec(cur_line,line_number);
+        return;
+    }
+
     if(cur_line.size() == 3)
     {
+        for(int i = 0 ; i < allarrays.size(); ++i)
+        {
+            if(cur_line[1] == allarrays[i].second)
+            {
+                error_double.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
+        }
+
         for(int i = 0; i < allvars.size() ; ++i)
         {
             if(cur_line[1] == allvars[i].second)
@@ -70,6 +86,24 @@ void double_var_dec(std::vector<std::string> cur_line,int line_number)
             if(allvars[i].second == cur_line[1])
             {
                 error_double.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
+        }
+
+        for(int i = 0 ; i < allarrays.size(); ++i)
+        {
+            if(cur_line[1] == allarrays[i].second)
+            {
+                error_double.redeclaration(line_number,cur_line[1]);
+                exit(-1);
+            }
+        }
+
+        for(int i = 0 ; i < allarrays.size(); ++i)
+        {
+            if(cur_line[3] == allarrays[i].second)
+            {
+                error_double.invalid_assignment(line_number);
                 exit(-1);
             }
         }
@@ -228,6 +262,14 @@ void double_var_assign(std::vector<std::string> cur_line,int line_number)
             exit(-1);
         }
         
+        for(int i = 0; i < allarrays.size(); ++i)   //a = array ;
+        {
+            if(cur_line[2] == allarrays[i].second)
+            {
+                error_double.type_incompatiblity(line_number);
+            }
+        }
+
         if(cur_line[1] == "=")
         {
             std::string predicted_type = "";
@@ -666,4 +708,105 @@ double return_double(std::string var_type , std::string name , int line_number)
         return static_cast<double>(it -> second);
     }
     return 0;
+}
+
+void double_arr_dec(std::vector<std::string> cur_line , int line_number)
+{
+    for(int i = 0; i < allvars.size() ; ++i)
+    {
+        if(cur_line[1] == allvars[i].second)
+        {
+            error_double.redeclaration(line_number,cur_line[1]);
+            exit(-1);
+        }
+    }
+
+    for(int i = 0; i < allarrays.size() ; ++i)
+    {
+        if(cur_line[1] == allarrays[i].second)
+        {
+            error_double.redeclaration(line_number,cur_line[1]);
+            exit(-1);
+        }
+    }
+
+    std::string size_str = cur_line[2];  
+    int array_size = 0;      
+    if(size_str[0] != '[' || size_str[size_str.size() - 1] != ']' || cur_line[3] != "=")
+    {
+        error_double.invalid_dec(line_number);
+        exit(-1);
+    }
+
+    if(cur_line[4] != "{" || cur_line[6] != "}")
+    {
+        error_double.invalid_dec(line_number);
+        exit(-1);
+    }
+
+    size_str.erase(size_str.begin());
+    size_str.erase(size_str.end() - 1);
+    std::string pred_type = "";
+
+    for(int i = 0; i < allvars.size() ; ++i)
+    {
+        if(size_str == allvars[i].second)
+        {
+            pred_type = allvars[i].first;
+        }
+    }
+
+    if(pred_type != "")
+    {
+        if(pred_type == "Int")
+        {
+            auto it = intmap.find(size_str);
+            array_size = it -> second;
+        }
+
+        else
+        {
+            error_double.invalid_dec(line_number);
+            exit(-1);
+        }
+    }
+
+    //Double array1 [size] ; just declaration
+    if(cur_line.size() == 4)
+    {
+        doublearrmap.insert(doublearrmap.begin(), {cur_line[0], std::list<double>(array_size, 0)});
+        allarrays.push_back(std::make_pair("Double" , cur_line[1]));
+    }
+
+    //Double array [5] = { 1,2,3,4,5 } ;
+    if(cur_line.size() == 8)
+    {
+        std::string input = cur_line[5] ;
+        std::istringstream ss(input);
+        std::string var;
+        std::list<double> vars;
+
+        while (std::getline(ss, var, ',')) 
+        {
+            try 
+            {
+                double value = std::stoi(var);
+                vars.push_back(value);
+            } 
+            catch (const std::exception& e) 
+            {
+                error_double.type_incompatiblity(line_number);
+                exit(-1);
+            } 
+        }    
+
+        if(vars.size() > array_size)
+        {
+            error_double.too_many_args(cur_line[1]);
+            exit(-1);
+        }
+
+        doublearrmap.insert(doublearrmap.begin(), {cur_line[0], vars});
+        allarrays.push_back(std::make_pair("Double" , cur_line[1]));
+    }        
 }

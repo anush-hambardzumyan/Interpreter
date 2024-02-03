@@ -1,6 +1,5 @@
 #include <iostream>
 
 int main() { 
-    Int array1 [4] ;
-    Int array2 = array1 ;
+    Int array1 [4] = { 3,5,9 } ;
 }   

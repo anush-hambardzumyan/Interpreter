@@ -262,7 +262,15 @@ void int_var_assign(std::vector<std::string> cur_line,int line_number)
             error_int.is_keyword(cur_line[2]);   // a = break ;
             exit(-1);
         }
-        
+
+        for(int i = 0; i < allarrays.size(); ++i)   //a = array ;
+        {
+            if(cur_line[2] == allarrays[i].second)
+            {
+                error_int.type_incompatiblity(line_number);
+            }
+        }
+
         if(cur_line[1] == "=")
         {
             std::string predicted_type = "";
@@ -714,73 +722,73 @@ void int_casts_comp_assign(std::vector<std::string> cur_line , int line_number ,
 
 void int_arr_dec(std::vector<std::string> cur_line , int line_number)
 {
-    //Int array1 [size] ; just declaration
-    if(cur_line.size() == 4)
+    for(int i = 0; i < allvars.size() ; ++i)
     {
-        for(int i = 0; i < allvars.size() ; ++i)
+        if(cur_line[1] == allvars[i].second)
         {
-            if(cur_line[1] == allvars[i].second)
-            {
-                error_int.redeclaration(line_number,cur_line[1]);
-                exit(-1);
-            }
-        }
-
-        for(int i = 0; i < allarrays.size() ; ++i)
-        {
-            if(cur_line[1] == allarrays[i].second)
-            {
-                error_int.redeclaration(line_number,cur_line[1]);
-                exit(-1);
-            }
-        }
-
-        std::string size_str = cur_line[2];  
-        int array_size = 0;      
-        if(size_str[0] != '[' || size_str[size_str.size() - 1] != ']')
-        {
-            error_int.invalid_dec(line_number);
+            error_int.redeclaration(line_number,cur_line[1]);
             exit(-1);
         }
-        size_str.erase(size_str.begin());
-        size_str.erase(size_str.end() - 1);
-        std::string pred_type = "";
+    }
 
-        for(int i = 0; i < allvars.size() ; ++i)
+    for(int i = 0; i < allarrays.size() ; ++i)
+    {
+        if(cur_line[1] == allarrays[i].second)
         {
-            if(size_str == allvars[i].second)
-            {
-                pred_type = allvars[i].first;
-            }
+            error_int.redeclaration(line_number,cur_line[1]);
+            exit(-1);
         }
+    }
 
-        if(pred_type != "")
+    std::string size_str = cur_line[2];  
+    int array_size = 0;      
+    if(size_str[0] != '[' || size_str[size_str.size() - 1] != ']')
+    {
+        error_int.invalid_dec(line_number);
+        exit(-1);
+    }
+    size_str.erase(size_str.begin());
+    size_str.erase(size_str.end() - 1);
+    std::string pred_type = "";
+
+    for(int i = 0; i < allvars.size() ; ++i)
+    {
+        if(size_str == allvars[i].second)
         {
-            if(pred_type == "Int")
-            {
-                auto it = intmap.find(size_str);
-                array_size = it -> second;
-            }
+            pred_type = allvars[i].first;
+        }
+    }
 
-            else
-            {
-                error_int.invalid_dec(line_number);
-                exit(-1);
-            }
+    if(pred_type != "")
+    {
+        if(pred_type == "Int")
+        {
+            auto it = intmap.find(size_str);
+            array_size = it -> second;
         }
 
         else
         {
-            try
-            {
-                array_size = std::stoi(size_str);
-            }
-            catch(const std::exception& e)
-            {
-                error_int.invalid_dec(line_number);
-                exit(-1);
-            }
+            error_int.invalid_dec(line_number);
+            exit(-1);
         }
+    }
+
+    else
+    {
+        try
+        {
+            array_size = std::stoi(size_str);
+        }
+        catch(const std::exception& e)
+        {
+            error_int.invalid_dec(line_number);
+            exit(-1);
+        }
+    }
+    //Int array1 [size] ; just declaration
+    if(cur_line.size() == 4)
+    {
         intarrmap.insert(intarrmap.begin(), {cur_line[0], std::list<int>(array_size, 0)});
         allarrays.push_back(std::make_pair("Int" , cur_line[1]));
     }

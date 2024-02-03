@@ -42,5 +42,5 @@ void interpreter(std::vector<std::vector<std::string>> TokStream)
     }
     //print1();
     //print2();
-    //print3();
+    print3();
 }    
