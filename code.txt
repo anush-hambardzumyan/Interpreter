@@ -1,11 +1,7 @@
 #include <iostream>
 
 int main() { 
-    Char a = 'A' ;
-    ++ a ;
-    ++ a ;
-    Bool b = true ;
-    std::cout << b ;
-    std::cout << " " ;
+    String a = "aaaa" ;
+    std::cin >> a ;
     std::cout << a ;
 }   

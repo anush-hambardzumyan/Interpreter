@@ -1,11 +1,9 @@
 #pragma once
 #include "parser.hpp"
 
-Error error;
-
 void print1()
 {
-    for (const auto& entry : charmap) 
+    for (const auto& entry : stringmap) 
     {
         std::cout << "Key: " << entry.first << ", Value: " << entry.second << std::endl;
     }
@@ -31,7 +29,6 @@ void interpreter(std::vector<std::vector<std::string>> TokStream)
 
         parser(cur_line,lines + 1);
     }
-    //print1();
+    print1();
     //print2();
-
 }    

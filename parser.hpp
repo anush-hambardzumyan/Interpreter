@@ -4,9 +4,6 @@
 #include <algorithm>
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
-#include "error_messages.hpp"
-std::string var_check(std::string predicted_var);
-#include "output.hpp"
 
 Error error_pars;
 std::string type_check(std::string predicted_type);
@@ -14,6 +11,9 @@ std::string var_check(std::string predicted_var);
 void type_cordinator(std::string predicted_type,std::vector<std::string> cur_line , int line_number);
 void var_cordinator(std::string predicted_var,std::vector<std::string> cur_line , int line_number);
 void prefix_inc_dec(std::vector<std::string> cur_line, int line_number);
+
+#include "output.hpp"
+#include "input.hpp"
 
 void parser(std::vector<std::string> cur_line,int line_number)
 {
@@ -44,13 +44,11 @@ void parser(std::vector<std::string> cur_line,int line_number)
             output(cur_line,line_number);
         }    
 
-        // else if(cur_line[0] == "std::cin")
-        // {
-        //     input(cur_line,line_number)
-        // }
+        else if(cur_line[0] == "std::cin")
+        {
+            input(cur_line,line_number);
+        }
     }
-
-
 }
 
 std::string type_check(std::string predicted_type)

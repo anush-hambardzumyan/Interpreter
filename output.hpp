@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "int_handling.hpp"
 #include "bool_handling.hpp"
@@ -7,7 +8,6 @@
 #include "string_handling.hpp"
 #include "types_and_keywords.hpp"
 #include "tokenizer.hpp"
-#include "error_messages.hpp"
 
 Error error_cout;
 void output(std::vector<std::string> cur_line, int line_number);
