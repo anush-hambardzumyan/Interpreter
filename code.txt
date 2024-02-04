@@ -1,5 +1,10 @@
 #include <iostream>
 
 int main() { 
-    Int array1 [4] = { 3,5,9 } ;
+    Int array1 ;
+    Int size ;
+    std::cin >> size ;
+
+    
+    Int array2 = size ; 
 }   
